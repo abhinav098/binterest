@@ -1,0 +1,61 @@
+.App-header {
+  background-color: #4b4b4b;
+  display: flex;
+  padding: 15px;
+  z-index: 100;
+  font-size: 2em;
+  font-weight: bold;
+  color: #fff;
+}
+
+.navLinks {
+  text-align: center;
+}
+
+.App-link1 {
+  color: black;
+  padding: 10px;
+}
+
+.App-body {
+  padding-top: 1em;
+}
+
+.active {
+  color: blue;
+  text-decoration: underline;
+}
+
+a {
+  text-decoration: none;
+}
+
+.buttonStyle {
+  border: 1px solid #db3939;
+  padding: 10px 30px;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: unset;
+  font-size: 1em;
+  font-weight: bold;
+  background-color: #db3939;
+}
+
+.buttonStyle a {
+  text-decoration: none;
+  color: #fff;
+}
+
+input {
+  width: 70%;
+  padding: 10px;
+  margin-left: 15%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #c4c4c4;
+  background-color: #c4c4c4;
+}
+label {
+  margin-left: 15%;
+  font-weight: bold;
+}
