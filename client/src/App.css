@@ -59,3 +59,9 @@ label {
   margin-left: 15%;
   font-weight: bold;
 }
+
+.spanLink {
+  text-decoration: underline;
+  text-align: center;
+  cursor: pointer;
+}

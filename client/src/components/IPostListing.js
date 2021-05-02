@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import queries from "../gqlQueries";
 import "../App.css";
@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 const IPostListing = (props) => {
   let query;
   let options;
+  const [page, setPage] = useState(1);
   const queryFor = props.queryFor;
   let showUpload = false;
 
@@ -15,15 +16,25 @@ const IPostListing = (props) => {
     case "unsplashImages":
       query = queries.GET_UNSPLASH;
       options = {
-        variables: { pageNum: 2 },
+        variables: { pageNum: page },
+        pollInterval: 300,
+        fetchPolicy: "cache-and-network",
       };
       break;
     case "binnedImages":
       query = queries.GET_BINNED;
+      options = {
+        pollInterval: 300,
+        fetchPolicy: "cache-and-network",
+      };
       break;
     case "userPostedImages":
       query = queries.GET_MY_POSTS;
       showUpload = true;
+      options = {
+        pollInterval: 300,
+        fetchPolicy: "cache-and-network",
+      };
       break;
     default:
       break;
@@ -44,15 +55,38 @@ const IPostListing = (props) => {
           </Link>
         </div>
       )}
-      {data[queryFor].map((image) => (
-        <>
+
+      {page > 1 && queryFor === "unsplashImages" && (
+        <div align="center">
+          <span className="spanLink" onClick={() => setPage(1)}>
+            Go Back to page 1
+          </span>
+        </div>
+      )}
+
+      {data[queryFor] && data[queryFor].length ? (
+        data[queryFor].map((image) => (
+          <div className="image-post" key={image.id}>
+            <br />
+            <br />
+            <ImagePost image={image} showDelete={showUpload} />
+            <br />
+            <br />
+          </div>
+        ))
+      ) : (
+        <h1 align="center">No Images yet</h1>
+      )}
+
+      {queryFor === "unsplashImages" && (
+        <div align="center">
+          <button onClick={() => setPage(page + 1)} className="buttonStyle">
+            Get More Posts
+          </button>
           <br />
           <br />
-          <ImagePost key={image.id} image={image} />
-          <br />
-          <br />
-        </>
-      ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,7 +1,8 @@
 const { RESTDataSource } = require("apollo-datasource-rest");
 const imagesData = require("../data/images");
 const UNSPLASH_API_KEY = "faGf8Qvphii5AO-4cmXEPILfr5uuAI_Kg4jMwoihLFs";
-
+const redis = require("redis");
+const client = redis.createClient();
 class PhotosApi extends RESTDataSource {
   constructor() {
     super();
@@ -18,14 +19,17 @@ class PhotosApi extends RESTDataSource {
     return imagePosts;
   }
 
-  imagePostObj(image) {
+  async imagePostObj(image) {
+    const binnedIds = await client.smembersAsync("binnedPostsIds");
+    const binned = binnedIds.includes(image.id) ? true : false;
+
     return {
       id: image.id,
       url: image.urls.regular,
-      posterName: image.user && image.user.name,
+      posterName: image.user && (image.user.name || image.username),
       description: image.description || image.alt_description,
-      userPosted: image.userPosted || false,
-      binned: image.binned || false,
+      userPosted: false,
+      binned: binned,
     };
   }
 }

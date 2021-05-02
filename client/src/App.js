@@ -81,9 +81,14 @@ function App() {
                 )}
               />
               <Route exact path="/new-post" component={NewPost} />
-
-              <Route exact path="/404" component={IPostListing} />
-              <Route component={IPostListing}></Route>
+              <Route
+                render={() => (
+                  <div align="center">
+                    <h1>404: not found</h1>
+                    <p>The page you're looking for does not exist!</p>
+                  </div>
+                )}
+              />
             </Switch>
           </div>
         </div>

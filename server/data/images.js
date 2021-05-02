@@ -8,139 +8,97 @@ bluebird.promisifyAll(redis.Multi.prototype);
 
 module.exports = {
   async getBinnedImages() {
-    return [
-      {
-        id: "ssKZHiHOtxA",
-        url:
-          "https://images.unsplash.com/photo-1612392061981-9d086fe894ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Ball Park Brand",
-        description: "hotdog sandwich with mustard and ketchup",
-        userPosted: false,
-        binned: true,
-      },
-      {
-        id: "idD9ofMGTK4",
-        url:
-          "https://images.unsplash.com/photo-1619546316434-264f95edec05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHwyfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Mak Flex",
-        description:
-          "man in blue denim jacket holding hands with woman in black jacket",
-        userPosted: false,
-        binned: true,
-      },
-      {
-        id: "fLxvz8EjCoQ",
-        url:
-          "https://images.unsplash.com/photo-1619545307432-9fc73f8135ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHwzfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Muhammad Ruqi Yaddin",
-        description: "woman in beige hijab standing",
-        userPosted: false,
-        binned: true,
-      },
-      {
-        id: "gd-vnAOreKc",
-        url:
-          "https://images.unsplash.com/photo-1619439443549-3b38b4611adc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHw0fHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Rodrigo Sümmer",
-        description: "cars on bridge near high rise buildings during daytime",
-        userPosted: false,
-        binned: true,
-      },
-      {
-        id: "CbvwhzzSPTY",
-        url:
-          "https://images.unsplash.com/photo-1619544173941-6113b3b23898?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHw1fHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Ryunosuke Kikuno",
-        description: "black and white ferris wheel",
-        userPosted: false,
-        binned: true,
-      },
-    ];
+    let imageIds = await client.smembersAsync("binnedPostsIds");
+    if (imageIds.length) {
+      const imagePostsRedis = await client.mgetAsync(imageIds);
+      return imagePostsRedis.map((r) => JSON.parse(r));
+    }
   },
 
   async getUserImages() {
-    return [
-      {
-        id: "ssKZHiHOtxA",
-        url:
-          "https://images.unsplash.com/photo-1612392061981-9d086fe894ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Ball Park Brand",
-        description: "hotdog sandwich with mustard and ketchup",
-        userPosted: true,
-        binned: false,
-      },
-      {
-        id: "idD9ofMGTK4",
-        url:
-          "https://images.unsplash.com/photo-1619546316434-264f95edec05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHwyfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Mak Flex",
-        description:
-          "man in blue denim jacket holding hands with woman in black jacket",
-        userPosted: true,
-        binned: false,
-      },
-      {
-        id: "fLxvz8EjCoQ",
-        url:
-          "https://images.unsplash.com/photo-1619545307432-9fc73f8135ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHwzfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Muhammad Ruqi Yaddin",
-        description: "woman in beige hijab standing",
-        userPosted: true,
-        binned: false,
-      },
-      {
-        id: "gd-vnAOreKc",
-        url:
-          "https://images.unsplash.com/photo-1619439443549-3b38b4611adc?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHw0fHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Rodrigo Sümmer",
-        description: "cars on bridge near high rise buildings during daytime",
-        userPosted: true,
-        binned: false,
-      },
-      {
-        id: "CbvwhzzSPTY",
-        url:
-          "https://images.unsplash.com/photo-1619544173941-6113b3b23898?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHw1fHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-        posterName: "Ryunosuke Kikuno",
-        description: "black and white ferris wheel",
-        userPosted: true,
-        binned: false,
-      },
-    ];
+    let imageIds = await client.smembersAsync("userPostedIds");
+    if (imageIds.length) {
+      const imagePostsRedis = await client.mgetAsync(imageIds);
+      return imagePostsRedis.map((r) => JSON.parse(r));
+    }
   },
 
   async uploadImage(args) {
-    return {
-      id: "fLxvz8EjCoQ",
-      url:
-        "https://images.unsplash.com/photo-1619545307432-9fc73f8135ff?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHwzfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-      posterName: "Muhammad Ruqi Yaddin",
-      description: "woman in beige hijab standing",
-      userPosted: true,
-      binned: false,
-    };
+    const errors = [];
+    const { url, description, posterName } = args;
+    const binned = false;
+    const userPosted = true;
+
+    [url, description, posterName].forEach((attr) => {
+      if (!(attr && typeof attr == "string" && attr.trim().length)) {
+        errors.push(
+          "Invalid input. URL, description and poster name must be a string"
+        );
+      }
+    });
+
+    if (errors.length) {
+      throw errors[0];
+    }
+
+    let id = uuid.v4();
+    const imagePost = { id, url, description, posterName, binned, userPosted };
+    await client.saddAsync("userPostedIds", imagePost.id);
+    await client.setAsync(`${imagePost.id}`, JSON.stringify(imagePost));
+    return imagePost;
   },
+
   async updateImage(args) {
-    return {
-      id: "idD9ofMGTK4",
-      url:
-        "https://images.unsplash.com/photo-1619546316434-264f95edec05?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MHwxfGFsbHwyfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-      posterName: "Mak Flex",
-      description:
-        "man in blue denim jacket holding hands with woman in black jacket",
-      userPosted: true,
-      binned: true,
-    };
+    const imageObjRedis = await client.getAsync(args.id);
+    if (!imageObjRedis) {
+      const { id, url, description, posterName, binned, userPosted } = args;
+      const imagePost = {
+        id,
+        url,
+        description,
+        posterName,
+        binned,
+        userPosted,
+      };
+      await client.saddAsync("binnedPostsIds", id);
+      await client.setAsync(id, JSON.stringify(imagePost));
+      return imagePost;
+    } else {
+      const image = JSON.parse(imageObjRedis);
+      const { id, url, description, posterName, binned, userPosted } = args;
+
+      try {
+        if (image.userPosted) {
+          const updatedImage = {
+            id,
+            url: url || image.url,
+            description: description || image.description,
+            posterName: posterName || image.posterName,
+            binned: binned,
+            userPosted: userPosted || image.userPosted,
+          };
+          await client.setAsync(id, JSON.stringify(updatedImage));
+
+          if (binned) {
+            await client.saddAsync("binnedPostsIds", id);
+          } else {
+            await client.sremAsync("binnedPostsIds", id);
+          }
+        } else {
+          await client.sremAsync("binnedPostsIds", id);
+          await client.delAsync(id);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
   },
+
   async deleteImage(id) {
-    return {
-      id: "ssKZHiHOtxA",
-      url:
-        "https://images.unsplash.com/photo-1612392061981-9d086fe894ed?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyMjY0NjB8MXwxfGFsbHwxfHx8fHx8Mnx8MTYxOTU1ODIzNQ&ixlib=rb-1.2.1&q=80&w=1080",
-      posterName: "Ball Park Brand",
-      description: "hotdog sandwich with mustard and ketchup",
-      userPosted: false,
-      binned: false,
-    };
+    const imageObjRedis = await client.getAsync(id);
+    await client.sremAsync("binnedPostsIds", id);
+    await client.sremAsync("userPostedIds", id);
+    await client.delAsync(id);
+    return JSON.parse(imageObjRedis);
   },
 };

@@ -4,43 +4,90 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import { useState } from "react";
+import queries from "../gqlQueries";
+import { useMutation } from "@apollo/client";
 
-const ImagePost = ({ image }) => {
+const ImagePost = ({ image, showDelete }) => {
   const [binned, setBinned] = useState(image.binned);
+  const [updatePost] = useMutation(queries.UPDATE_POST);
+  const [deletePost] = useMutation(queries.DELETE_POST);
 
   const handleBin = () => {
-    setBinned(!binned);
+    try {
+      let binned = !image.binned;
+      updatePost({
+        variables: {
+          id: image.id,
+          url: image.url,
+          description: image.description,
+          posterName: image.posterName,
+          binned,
+          userPosted: image.userPosted,
+        },
+      });
+      setBinned(binned);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleDelete = () => {
+    try {
+      deletePost({
+        variables: {
+          id: image.id,
+        },
+      });
+    } catch (e) {}
   };
 
   return (
-    <Grid container key={image.id}>
-      <Grid item xs={3}></Grid>
-      <Grid item xs={6}>
-        <Card>
-          <CardContent>
-            <div style={{ fontWeight: "bold" }}>
-              {image.description} by: {image.posterName}
-            </div>
-          </CardContent>
-          <CardMedia
-            component="img"
-            alt={image.description}
-            height="300"
-            image={image.url}
-            title={image.description}
-          />
+    <div key={image.id}>
+      <Grid container direction="row" justify="center" alignItems="center">
+        <Grid item xs={6}>
+          <Card>
+            <CardContent>
+              <div style={{ fontWeight: "bold" }}>
+                {image.description} by: {image.posterName}
+              </div>
+            </CardContent>
+            <CardMedia
+              component="img"
+              alt={image.description}
+              height="300"
+              image={image.url}
+              title={image.description}
+            />
 
-          <CardActions style={{ display: "unset" }}>
-            <div align="center" className="actionButton">
-              <button className="buttonStyle" onClick={handleBin}>
-                {binned ? "remove from bin" : "add to bin"}
-              </button>
-            </div>
-          </CardActions>
-        </Card>
+            <CardActions style={{ display: "unset" }}>
+              <div align="center">
+                <Grid container>
+                  <Grid item xs={showDelete ? 6 : 12}>
+                    <button className="buttonStyle" onClick={handleBin}>
+                      {binned ? "remove from bin" : "add to bin"}
+                    </button>
+                  </Grid>
+                  {showDelete && (
+                    <Grid item xs={4}>
+                      <br />
+                      <span
+                        style={{
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                        }}
+                        onClick={handleDelete}
+                      >
+                        Delete this post
+                      </span>
+                    </Grid>
+                  )}
+                </Grid>
+              </div>
+            </CardActions>
+          </Card>
+        </Grid>
       </Grid>
-      <Grid item xs={3}></Grid>
-    </Grid>
+    </div>
   );
 };
 
