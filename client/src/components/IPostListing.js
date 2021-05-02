@@ -58,9 +58,10 @@ const IPostListing = (props) => {
 
       {page > 1 && queryFor === "unsplashImages" && (
         <div align="center">
-          <span className="spanLink" onClick={() => setPage(1)}>
-            Go Back to page 1
+          <span className="spanLink" onClick={() => setPage(page - 1)}>
+            Go Back to page {page - 1}
           </span>
+          <br />
         </div>
       )}
 

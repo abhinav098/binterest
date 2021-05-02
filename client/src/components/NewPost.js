@@ -57,19 +57,29 @@ const NewPost = () => {
               <label htmlFor="description">
                 Description:
                 <br />
-                <input id="description" name="description" type="text" />
+                <input
+                  id="description"
+                  name="description"
+                  required
+                  type="text"
+                />
               </label>
               <br />
               <label htmlFor="image-url">
                 Image URL:
                 <br />
-                <input id="image-url" name="url" type="text" />
+                <input id="image-url" name="url" required type="text" />
               </label>
               <br />
               <label htmlFor="author-name">
                 Author Name:
                 <br />
-                <input id="author-name" name="posterName" type="text" />
+                <input
+                  id="author-name"
+                  name="posterName"
+                  required
+                  type="text"
+                />
               </label>
               <div align="center" className="actionButton">
                 <button className="buttonStyle">submit</button>
