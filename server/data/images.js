@@ -29,22 +29,30 @@ module.exports = {
     const binned = false;
     const userPosted = true;
 
-    ["url", "description", "posterName"].forEach((attr) => {
-      let value = args[attr].value;
-      if (!(value && typeof value == "string" && value.trim().length)) {
-        errors.push(`${attr} can't be blank!`);
+    [url, description, posterName].forEach((attr) => {
+      if (!(attr && typeof attr == "string" && attr.trim().length)) {
+        errors.push(
+          "Invalid input. URL, description and poster name must be a string"
+        );
       }
     });
 
     if (errors.length) {
-      throw new Error(errors.join(", "));
+      throw new Error(errors[0]);
+    } else {
+      let id = uuid.v4();
+      const imagePost = {
+        id,
+        url,
+        description,
+        posterName,
+        binned,
+        userPosted,
+      };
+      await client.saddAsync("userPostedIds", imagePost.id);
+      await client.setAsync(`${imagePost.id}`, JSON.stringify(imagePost));
+      return imagePost;
     }
-
-    let id = uuid.v4();
-    const imagePost = { id, url, description, posterName, binned, userPosted };
-    await client.saddAsync("userPostedIds", imagePost.id);
-    await client.setAsync(`${imagePost.id}`, JSON.stringify(imagePost));
-    return imagePost;
   },
 
   async updateImage(args) {

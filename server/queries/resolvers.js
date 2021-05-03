@@ -1,5 +1,4 @@
 const { RESTDataSource } = require("apollo-datasource-rest");
-const { UserInputError } = require("apollo-server");
 const imagesData = require("../data/images");
 const UNSPLASH_API_KEY = "faGf8Qvphii5AO-4cmXEPILfr5uuAI_Kg4jMwoihLFs";
 const redis = require("redis");
@@ -50,11 +49,7 @@ const resolvers = {
 
   Mutation: {
     uploadImage: async (_, args) => {
-      try {
-        return await imagesData.uploadImage(args);
-      } catch (e) {
-        throw new UserInputError(e.message);
-      }
+      return await imagesData.uploadImage(args);
     },
     updateImage: async (_, args) => {
       return await imagesData.updateImage(args);
