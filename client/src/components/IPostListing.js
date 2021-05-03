@@ -17,14 +17,14 @@ const IPostListing = (props) => {
       query = queries.GET_UNSPLASH;
       options = {
         variables: { pageNum: 1 },
-        fetchPolicy: "network-only",
+        fetchPolicy: "no-cache",
       };
       break;
     case "binnedImages":
       query = queries.GET_BINNED;
       options = {
         pollInterval: 300,
-        fetchPolicy: "network-only",
+        fetchPolicy: "no-cache",
       };
       break;
     case "userPostedImages":
@@ -32,7 +32,7 @@ const IPostListing = (props) => {
       showUpload = true;
       options = {
         pollInterval: 300,
-        fetchPolicy: "network-only",
+        fetchPolicy: "no-cache",
       };
       break;
     default:
@@ -65,15 +65,18 @@ const IPostListing = (props) => {
       )}
 
       {data[queryFor] && data[queryFor].length ? (
-        data[queryFor].map((image) => (
-          <div className="image-post" key={image.id}>
-            <br />
-            <br />
-            <ImagePost image={image} showDelete={showUpload} />
-            <br />
-            <br />
-          </div>
-        ))
+        data[queryFor].map(
+          (image) =>
+            image && (
+              <div className="image-post" key={image.id}>
+                <br />
+                <br />
+                <ImagePost image={image} showDelete={showUpload} />
+                <br />
+                <br />
+              </div>
+            )
+        )
       ) : (
         <h1 align="center">No Images yet</h1>
       )}

@@ -96,13 +96,16 @@ module.exports = {
           await client.delAsync(id);
         }
       } catch (e) {
-        console.log(e);
+        throw new Error(e && e.message);
       }
     }
   },
 
   async deleteImage(id) {
     const imageObjRedis = await client.getAsync(id);
+    if (!imageObjRedis) {
+      throw new Error("No Image post found with this id");
+    }
     await client.sremAsync("binnedPostsIds", id);
     await client.sremAsync("userPostedIds", id);
     await client.delAsync(id);
