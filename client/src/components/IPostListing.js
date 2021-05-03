@@ -16,15 +16,15 @@ const IPostListing = (props) => {
     case "unsplashImages":
       query = queries.GET_UNSPLASH;
       options = {
-        variables: { pageNum: page },
-        fetchPolicy: "cache-and-network",
+        variables: { pageNum: 1 },
+        fetchPolicy: "network-only",
       };
       break;
     case "binnedImages":
       query = queries.GET_BINNED;
       options = {
         pollInterval: 300,
-        fetchPolicy: "cache-and-network",
+        fetchPolicy: "network-only",
       };
       break;
     case "userPostedImages":
@@ -32,7 +32,7 @@ const IPostListing = (props) => {
       showUpload = true;
       options = {
         pollInterval: 300,
-        fetchPolicy: "cache-and-network",
+        fetchPolicy: "network-only",
       };
       break;
     default:

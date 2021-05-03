@@ -7,10 +7,10 @@ import { useState } from "react";
 import queries from "../gqlQueries";
 import { useMutation } from "@apollo/client";
 
-const ImagePost = ({ image, showDelete }) => {
-  const [binned, setBinned] = useState(image.binned);
+const ImagePost = ({ image, showDelete, refetch }) => {
   const [updatePost] = useMutation(queries.UPDATE_POST);
   const [deletePost] = useMutation(queries.DELETE_POST);
+  const [binned, setBinned] = useState(image.binned);
 
   const handleBin = async () => {
     try {
@@ -26,6 +26,7 @@ const ImagePost = ({ image, showDelete }) => {
         },
       });
       setBinned(binned);
+      await refetch();
     } catch (e) {
       console.log(e.message);
     }
