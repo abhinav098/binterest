@@ -12,10 +12,10 @@ const ImagePost = ({ image, showDelete }) => {
   const [updatePost] = useMutation(queries.UPDATE_POST);
   const [deletePost] = useMutation(queries.DELETE_POST);
 
-  const handleBin = () => {
+  const handleBin = async () => {
     try {
       let binned = !image.binned;
-      updatePost({
+      await updatePost({
         variables: {
           id: image.id,
           url: image.url,
@@ -27,7 +27,7 @@ const ImagePost = ({ image, showDelete }) => {
       });
       setBinned(binned);
     } catch (e) {
-      console.error(e);
+      console.log(e.message);
     }
   };
 

@@ -13,32 +13,37 @@ const NewPost = () => {
 
   const history = useHistory();
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
-    let { url, description, posterName } = event.target.elements;
-    [(url, description, posterName)].forEach((attr) => {
-      let value = attr.value;
+    const errors = [];
+    const inputElements = event.target.elements;
+    const { url, description, posterName } = inputElements;
+    ["url", "description", "posterName"].forEach((attr) => {
+      let value = inputElements[attr].value;
       if (!(value && typeof value == "string" && value.trim().length)) {
-        setError(
-          "Invalid input. URL, description and poster name must be a string"
-        );
-      } else {
-        try {
-          const createdPost = addPost({
-            variables: {
-              url: url.value,
-              description: description.value,
-              posterName: posterName.value,
-            },
-          });
-          if (createdPost) {
-            history.push("/my-posts");
-          }
-        } catch (e) {
-          setError("Something went wrong. Contact the Administrator!");
-        }
+        errors.push(`${attr} can't be blank!`);
       }
     });
+
+    if (errors.length) {
+      setError(errors.join(", "));
+    } else {
+      try {
+        const createdPost = await addPost({
+          variables: {
+            url: url.value,
+            description: description.value,
+            posterName: posterName.value,
+          },
+        });
+        if (createdPost) {
+          history.push("/my-posts");
+        }
+      } catch (e) {
+        // handle backend errors
+        setError(e.message);
+      }
+    }
   };
 
   return (
@@ -51,35 +56,27 @@ const NewPost = () => {
           <CardContent>
             <h1 align="center">Create Post</h1>
 
-            <p align="center">{error}</p>
+            <p style={{ color: "#d50000", fontWeight: "550" }} align="center">
+              {error}
+            </p>
 
             <form onSubmit={handleFormSubmit}>
               <label htmlFor="description">
                 Description:
                 <br />
-                <input
-                  id="description"
-                  name="description"
-                  required
-                  type="text"
-                />
+                <input id="description" name="description" type="text" />
               </label>
               <br />
               <label htmlFor="image-url">
                 Image URL:
                 <br />
-                <input id="image-url" name="url" required type="text" />
+                <input id="image-url" name="url" type="text" />
               </label>
               <br />
               <label htmlFor="author-name">
                 Author Name:
                 <br />
-                <input
-                  id="author-name"
-                  name="posterName"
-                  required
-                  type="text"
-                />
+                <input id="author-name" name="posterName" type="text" />
               </label>
               <div align="center" className="actionButton">
                 <button className="buttonStyle">submit</button>

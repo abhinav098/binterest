@@ -17,7 +17,6 @@ const IPostListing = (props) => {
       query = queries.GET_UNSPLASH;
       options = {
         variables: { pageNum: page },
-        pollInterval: 300,
         fetchPolicy: "cache-and-network",
       };
       break;

@@ -29,16 +29,15 @@ module.exports = {
     const binned = false;
     const userPosted = true;
 
-    [url, description, posterName].forEach((attr) => {
-      if (!(attr && typeof attr == "string" && attr.trim().length)) {
-        errors.push(
-          "Invalid input. URL, description and poster name must be a string"
-        );
+    ["url", "description", "posterName"].forEach((attr) => {
+      let value = args[attr].value;
+      if (!(value && typeof value == "string" && value.trim().length)) {
+        errors.push(`${attr} can't be blank!`);
       }
     });
 
     if (errors.length) {
-      throw errors[0];
+      throw new Error(errors.join(", "));
     }
 
     let id = uuid.v4();
